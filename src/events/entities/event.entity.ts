@@ -28,6 +28,12 @@ export class Event {
   @Column({ type: 'datetime', nullable: true })
   end_date?: Date;
 
+  @Column({ type: 'text', nullable: true })
+  image_url?: string;
+
+  @Column({ type: 'text', nullable: true })
+  map_url?: string;
+
   @ManyToOne(() => User, (user) => user.events, {
     onDelete: 'SET NULL',
     nullable: true,

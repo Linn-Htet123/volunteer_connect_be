@@ -11,13 +11,17 @@ export class CreateEventDto {
   @IsString()
   name: string;
 
-  @IsOptional()
   @IsString()
-  description?: string;
+  description: string;
 
-  @IsOptional()
   @IsString()
-  location?: string;
+  location: string;
+
+  @IsString()
+  image_url: string;
+
+  @IsString()
+  map_url?: string;
 
   @IsDateString()
   start_date: string;

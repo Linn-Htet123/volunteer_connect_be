@@ -9,7 +9,9 @@ import { UsersModule } from './users/users.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
 import { EventsModule } from './events/events.module';
-import { EventsModule } from './events/events.module';
+import { UploadModule } from './upload/upload.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 console.log('NODE_ENV:', process.env.NODE_ENV);
 console.log('Looking for env file:', `.env.${process.env.NODE_ENV}`);
@@ -19,6 +21,10 @@ console.log('Looking for env file:', `.env.${process.env.NODE_ENV}`);
     ConfigModule.forRoot({
       envFilePath: [`.env.${process.env.NODE_ENV}`, '.env'],
       isGlobal: true,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads',
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -47,6 +53,7 @@ console.log('Looking for env file:', `.env.${process.env.NODE_ENV}`);
     AuthModule,
     UsersModule,
     EventsModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [
