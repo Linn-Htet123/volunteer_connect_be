@@ -1,0 +1,49 @@
+doctype html
+html
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title Task Assignment - Volunteer Connect
+    style.
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f6f6f6;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 600px;
+        margin: 30px auto;
+        background-color: #ffffff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      h2 {
+        color: #2a7ae4;
+      }
+      .footer {
+        margin-top: 30px;
+        font-size: 12px;
+        color: #777;
+        text-align: center;
+      }
+  body
+    .container
+      h2 Hello #{volunteerName},
+
+      p You’ve been assigned a new task as part of the <strong>#{eventName}</strong> event.
+
+      p
+        | <strong>Task:</strong> #{taskTitle}
+        br
+        | <strong>Start:</strong> #{startDate}
+        br
+        | <strong>End:</strong> #{endDate}
+
+      p Please log in to your Volunteer Connect account to view the details and confirm your participation.
+
+      p Thank you for your valuable contribution!
+
+      .footer
+        | — Volunteer Connect Team

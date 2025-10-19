@@ -1,10 +1,4 @@
-import {
-  IsString,
-  IsOptional,
-  IsDateString,
-  IsEnum,
-  IsInt,
-} from 'class-validator';
+import { IsString, IsOptional, IsDateString, IsEnum } from 'class-validator';
 import { EventStatus } from '../enums/event.enum';
 
 export class CreateEventDto {
@@ -17,6 +11,7 @@ export class CreateEventDto {
   @IsString()
   location: string;
 
+  @IsOptional()
   @IsString()
   image_url: string;
 
@@ -30,7 +25,10 @@ export class CreateEventDto {
   @IsDateString()
   end_date?: string;
 
-  @IsInt()
+  @IsString()
+  capacity?: number;
+
+  @IsString()
   created_by: number;
 
   @IsOptional()

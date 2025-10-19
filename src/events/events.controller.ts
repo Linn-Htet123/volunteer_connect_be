@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import {
   Controller,
@@ -18,11 +19,11 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from 'src/auth/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('events')
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
-  @UseGuards(AuthGuard)
   @Post()
   @UseInterceptors(FileInterceptor('image'))
   create(
@@ -39,14 +40,24 @@ export class EventsController {
     return this.eventsService.findAll();
   }
 
+  @Get('/org/my-events')
+  findEventByCreator(@Req() req) {
+    return this.eventsService.findEventByCreator(req.user.sub);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.eventsService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
-    return this.eventsService.update(+id, updateEventDto);
+  @UseInterceptors(FileInterceptor('image'))
+  update(
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
+    @Body() updateEventDto: UpdateEventDto,
+  ) {
+    return this.eventsService.update(+id, updateEventDto, file);
   }
 
   @UseGuards(AuthGuard)

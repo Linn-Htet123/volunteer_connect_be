@@ -53,10 +53,17 @@ export class EventsService {
   }
 
   async findOne(id: number): Promise<Event> {
-    const event = await this.eventRepo.findOne({
-      where: { id },
-      relations: ['created_by'],
-    });
+    const event = await this.eventRepo
+      .createQueryBuilder('event')
+      .leftJoinAndSelect('event.created_by', 'created_by')
+      .loadRelationCountAndMap(
+        'event.totalApproved',
+        'event.event_volunteers',
+        'ev',
+        (qb) => qb.where('ev.status = :status', { status: 'Approved' }),
+      )
+      .where('event.id = :id', { id })
+      .getOne();
 
     if (!event) {
       throw new NotFoundException(`Event with ID ${id} not found`);
@@ -65,10 +72,36 @@ export class EventsService {
     return event;
   }
 
-  async update(id: number, updateEventDto: UpdateEventDto): Promise<Event> {
+  async findEventByCreator(userId: number): Promise<Event[]> {
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
+    }
+
+    return await this.eventRepo.find({
+      where: { created_by: { id: userId } },
+      relations: ['created_by'],
+      order: { start_date: 'ASC' },
+    });
+  }
+
+  async update(
+    id: number,
+    updateEventDto: UpdateEventDto,
+    file?: Express.Multer.File,
+  ): Promise<Event> {
+    // Find the event first
     const event = await this.findOne(id);
 
+    // Handle uploaded file (image)
+    if (file) {
+      updateEventDto.image_url = `/uploads/${file.filename}`;
+    }
+
+    // Merge the updated fields into the event
     Object.assign(event, updateEventDto);
+
+    // Save and return the updated event
     return await this.eventRepo.save(event);
   }
 

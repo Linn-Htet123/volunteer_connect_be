@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { UserRole } from '../../users/enum/user.enum';
 import { Event } from 'src/events/entities/event.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity('users')
 export class User {
@@ -20,6 +21,7 @@ export class User {
   @Column({ length: 150, unique: true })
   email: string;
 
+  @Exclude()
   @Column({ name: 'password_hash', length: 255 })
   passwordHash: string;
 

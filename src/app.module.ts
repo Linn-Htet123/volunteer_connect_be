@@ -12,6 +12,12 @@ import { EventsModule } from './events/events.module';
 import { UploadModule } from './upload/upload.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { VolunteersModule } from './volunteers/volunteers.module';
+import { EventVolunteersModule } from './event-volunteers/event-volunteers.module';
+import { TasksModule } from './tasks/tasks.module';
+import { MailModule } from './mail/mail.module';
+import { ChatModule } from './chat/chat.module';
+import { EventResourcesModule } from './event-resources/event-resources.module';
 
 console.log('NODE_ENV:', process.env.NODE_ENV);
 console.log('Looking for env file:', `.env.${process.env.NODE_ENV}`);
@@ -47,6 +53,7 @@ console.log('Looking for env file:', `.env.${process.env.NODE_ENV}`);
           database: configService.get('MYSQL_DATABASE'),
           entities: [__dirname + '/**/*.entity{.ts,.js}'],
           synchronize: true,
+          timezone: 'Z',
         };
       },
     }),
@@ -54,6 +61,12 @@ console.log('Looking for env file:', `.env.${process.env.NODE_ENV}`);
     UsersModule,
     EventsModule,
     UploadModule,
+    VolunteersModule,
+    EventVolunteersModule,
+    TasksModule,
+    MailModule,
+    ChatModule,
+    EventResourcesModule,
   ],
   controllers: [AppController],
   providers: [
