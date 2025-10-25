@@ -1,0 +1,114 @@
+doctype html
+html
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title Certificate of Completion - Volunteer Connect
+    style.
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f6f6f6;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 600px;
+        margin: 30px auto;
+        background-color: #ffffff;
+        border-radius: 8px;
+        padding: 30px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .header {
+        text-align: center;
+        padding: 20px 0;
+        border-bottom: 3px solid #2a7ae4;
+        margin-bottom: 30px;
+      }
+      .header h1 {
+        color: #2a7ae4;
+        margin: 0;
+        font-size: 28px;
+      }
+      .header p {
+        color: #666;
+        margin: 10px 0 0 0;
+        font-size: 16px;
+      }
+      .content {
+        line-height: 1.8;
+        color: #333;
+      }
+      .highlight-box {
+        background-color: #f0f7ff;
+        border-left: 4px solid #2a7ae4;
+        padding: 15px 20px;
+        margin: 20px 0;
+        border-radius: 4px;
+      }
+      .highlight-box strong {
+        color: #2a7ae4;
+      }
+      .certificate-icon {
+        text-align: center;
+        font-size: 60px;
+        margin: 20px 0;
+      }
+      .cta-button {
+        display: inline-block;
+        background-color: #2a7ae4;
+        color: #ffffff;
+        padding: 12px 30px;
+        text-decoration: none;
+        border-radius: 5px;
+        margin: 20px 0;
+        font-weight: bold;
+      }
+      .footer {
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid #e0e0e0;
+        font-size: 12px;
+        color: #777;
+        text-align: center;
+        line-height: 1.6;
+      }
+  body
+    .container
+      .header
+        h1 Congratulations!
+        p Certificate of Completion
+
+      .content
+        p Dear <strong>#{volunteerName}</strong>,
+
+        p We are delighted to present you with your Certificate of Completion! Your dedication and hard work have made a significant impact.
+
+        if eventName
+          .highlight-box
+            p
+              | <strong>Campaign:</strong> #{eventName}
+              br
+           
+
+        p Your certificate is attached to this email as a PDF document. You can download, print, or share it as needed.
+
+        p This certificate recognizes your:
+        ul
+          li Commitment to community service
+          li Valuable contribution to our cause
+          li Dedication and professionalism
+
+        p We truly appreciate your efforts and hope to see you at future volunteer opportunities!
+
+        p If you have any questions or need additional copies of your certificate, please don't hesitate to contact us.
+
+        p
+          | Warm regards,
+          br
+          | <strong>The Volunteer Connect Team</strong>
+
+      .footer
+        p This is an automated email from Volunteer Connect.
+        p If you have any questions, please reply to this email or contact our support team.
+        p © 2025 Volunteer Connect. All rights reserved.

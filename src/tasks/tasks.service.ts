@@ -142,6 +142,8 @@ export class TasksService {
     return this.vtRepo.save(assignment);
   }
 
+  // Add this method to your TasksService class
+
   async assignMultipleVolunteers(
     task_id: number,
     dto: CreateAssignVolunteers,
@@ -151,9 +153,10 @@ export class TasksService {
     const task = await this.findOne(task_id);
     if (!task) throw new NotFoundException(`Task ${task_id} not found`);
 
-    // Fetch all volunteers in one query
+    // Fetch all volunteers in one query with user relations
     const volunteers = await this.volunteerRepo.find({
       where: { id: In(volunteer_ids) },
+      relations: ['user'], // Add user relation to get email and name
     });
 
     if (!volunteers.length) {
@@ -190,7 +193,43 @@ export class TasksService {
 
     try {
       // Save all new assignments at once
-      return await this.vtRepo.save(newAssignments);
+      const savedAssignments = await this.vtRepo.save(newAssignments);
+
+      // ---- Send Email Notifications to All Assigned Volunteers ----
+      const emailPromises = savedAssignments.map(async (assignment) => {
+        try {
+          await this.mailService.sendMail(
+            assignment.volunteer.user.email,
+            `You've Been Assigned to: ${task.title}`,
+            './task-assigned', // Template name
+            {
+              volunteerName: assignment.volunteer.user.name,
+              taskTitle: task.title,
+              taskDescription: task.description,
+              eventName: task.event.name,
+              taskLocation: task.location,
+              taskStartDate: task.start_date,
+              taskEndDate: task.end_date,
+              assignmentStart: assignment.start,
+              assignmentEnd: assignment.end,
+            },
+          );
+
+          console.log(
+            `Assignment email sent to ${assignment.volunteer.user.email}`,
+          );
+        } catch (error) {
+          console.error(
+            `Failed to send assignment email to ${assignment.volunteer.user.email}: ${error}`,
+          );
+          // Continue with other emails even if one fails
+        }
+      });
+
+      // Execute all email sends concurrently
+      await Promise.allSettled(emailPromises);
+
+      return savedAssignments;
     } catch (error) {
       // Rollback any partial changes if save fails
       await this.vtRepo.remove(newAssignments);
@@ -199,7 +238,6 @@ export class TasksService {
       );
     }
   }
-
   // tasks.service.ts
   async getAssignedVolunteersForTask(taskId: number) {
     const assignments = await this.vtRepo.find({
